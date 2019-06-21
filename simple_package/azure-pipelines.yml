@@ -34,5 +34,8 @@ steps:
   displayName: Build package
   workingDirectory: $(workingDirectory)
 
-- upload: $(workingDirectory)/dist
-  artifact: dist
+- task: PublishPipelineArtifact@0
+  displayName: Publish artifacts
+  inputs:
+    artifactName: dist
+    targetPath: $(workingDirectory)/dist
