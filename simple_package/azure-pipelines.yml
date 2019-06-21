@@ -33,7 +33,6 @@ steps:
 - bash: python setup.py sdist bdist_wheel
   displayName: Build package
   workingDirectory: $(workingDirectory)
-  
-- publish: $(workingDirectory)/dist
+
+- upload: $(pythonVersion)/dist
   artifact: dist
-  displayName: Publish artifacts
