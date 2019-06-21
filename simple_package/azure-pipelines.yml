@@ -1,0 +1,33 @@
+pool:
+  vmImage: ubuntu-16.04
+
+variables:
+  python.version: 3.7
+  workingDirectory: simple_package
+
+steps:
+- task: UsePythonVersion@0
+  displayName: Use Python $(python.version)
+  inputs:
+    versionSpec: '$(python.version)'
+
+- bash: pip install -r requirements.build.txt -U
+  displayName: Install packages for build
+
+- bash: find . -type f -name "*.py" | xargs pylint
+  displayName: "Linting: pylint"
+  workingDirectory: $(workingDirectory)
+
+- bash: flake8
+  displayName: "Linting: flake8"
+  workingDirectory: $(workingDirectory)
+
+- bash: python setup.py sdist bdist_wheel
+  displayName: Build package
+  workingDirectory: $(workingDirectory)
+  
+- task: PublishPipelineArtifact@0
+  displayName: Publish artifacts
+  inputs:
+    artifactName: dist
+    targetPath: $(workingDirectory)/dist
