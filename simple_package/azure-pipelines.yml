@@ -34,5 +34,5 @@ steps:
   displayName: Build package
   workingDirectory: $(workingDirectory)
 
-- upload: $(pythonVersion)/dist
+- upload: $(workingDirectory)/dist
   artifact: dist
