@@ -1,15 +1,20 @@
+trigger:
+  paths:
+    include:
+    - simple_package/*
+
 pool:
   vmImage: ubuntu-16.04
 
 variables:
-  python.version: 3.7
+  pythonVersion: 3.7
   workingDirectory: simple_package
 
 steps:
 - task: UsePythonVersion@0
-  displayName: Use Python $(python.version)
+  displayName: Use Python $(pythonVersion)
   inputs:
-    versionSpec: '$(python.version)'
+    versionSpec: '$(pythonVersion)'
 
 - bash: pip install -r requirements.build.txt -U
   displayName: Install packages for build
@@ -26,8 +31,6 @@ steps:
   displayName: Build package
   workingDirectory: $(workingDirectory)
   
-- task: PublishPipelineArtifact@0
+- publish: $(workingDirectory)/dist
+  artifact: dist
   displayName: Publish artifacts
-  inputs:
-    artifactName: dist
-    targetPath: $(workingDirectory)/dist
